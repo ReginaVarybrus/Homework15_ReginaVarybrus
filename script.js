@@ -28,6 +28,7 @@ function dataOutput(data) {
 
                 div.classList.add('div__item');
                 div.setAttribute('div-name', val.name);
+                div.setAttribute('div-img', val.image);
                 div.classList.add('open__popup');
                 
                 div.appendChild(ul);
@@ -124,15 +125,13 @@ const closePopupButton = document.getElementById('close-popup');
 let currentName = document.getElementById('name');
 let currentImg = document.getElementById('img');
 let srcImg = personagesList.querySelector('img');
-console.log(srcImg)
 
 function handleClick(e) {
     e.stopPropagation();
     popUp.classList.add('active');
     console.log('click', e.target);
     currentName.textContent = e.target.getAttribute("div-name");
-    console.log(srcImg)
-    // currentImg.src = srcImg.src;
+    currentImg.src = e.target.getAttribute("div-img");;
 }
 
 personagesList.addEventListener('click', handleClick);
