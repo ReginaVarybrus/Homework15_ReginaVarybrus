@@ -5,10 +5,6 @@ const btnPrev = document.getElementById('previous');
 const btnNext = document.getElementById('next');
 const btnGo = document.getElementById('go-button');
 const searchName = document.getElementById('search');
-// const radios = document.getElementsByName('status');
-const radioBtnAlive = document.getElementById('alive');
-const radioBtnDead = document.getElementById('dead');
-const radioBtnUnknown = document.getElementById('unknown');
 
 let numPage = document.getElementById('page');
 
@@ -24,13 +20,14 @@ function dataOutput(data) {
                 let li_0 = document.createElement('li');
                 let li_1 = document.createElement('li');
                 
-                
                 li_0.innerText = 'name: ' + val.name;
                 li_1.innerText = 'status: ' + val.status;
 
                 img.src = val.image;
+                img.classList.add('img');
 
                 div.classList.add('div__item');
+                div.setAttribute('div-name', val.name);
                 div.classList.add('open__popup');
                 
                 div.appendChild(ul);
@@ -70,6 +67,7 @@ btnNext.addEventListener('click', () => {
     getData(page);
     pagination(page);
     console.log('state next', state);
+    console.log('pages', state.info.pages)
 });
 
 btnPrev.addEventListener('click', () => {
@@ -89,7 +87,7 @@ function sName (pageUrl) {
     for (let radio of radios) {
         if (radio.type === 'radio' && radio.checked) {
             urlParams.searchParams.append('status', radio.value);
-            // console.log(radio.value);
+            console.log(radio.value);
             selected = true;
         }
     }
@@ -113,10 +111,47 @@ function checkLetter(event) {
 };
 
 btnGo.addEventListener('click', () => {
-    
-    getData(sName(page));
-    console.log(searchName.value)
-    console.log('url', page)
-    console.log('state', state)
-    
+    numPage.innerHTML = 1;
+    getData(sName('https://rickandmortyapi.com/api/character/'));
+    // console.log(searchName.value)
+    // console.log('state', state)
 });
+
+const outsideSpace = document.getElementsByTagName('body');
+const popUp = document.getElementById('popup');
+const closePopupButton = document.getElementById('close-popup');
+
+let currentName = document.getElementById('name');
+let currentImg = document.getElementById('img');
+let srcImg = personagesList.querySelector('img');
+console.log(srcImg)
+
+function handleClick(e) {
+    e.stopPropagation();
+    popUp.classList.add('active');
+    console.log('click', e.target);
+    currentName.textContent = e.target.getAttribute("div-name");
+    console.log(srcImg)
+    // currentImg.src = srcImg.src;
+}
+
+personagesList.addEventListener('click', handleClick);
+
+function closePopup (e) {
+    popUp.classList.remove('active');
+}
+
+popUp.addEventListener('click', (e) => {
+    e.stopPropagation();
+})
+
+closePopupButton.addEventListener('click', (e) => {
+    closePopup();
+    e.stopPropagation();
+})
+
+outsideSpace[0].addEventListener('click', () => {
+    closePopup();
+});
+
+
